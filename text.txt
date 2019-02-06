@@ -1,0 +1,11 @@
+from models.notebook_users import User
+check = User()
+check.user_registration('jamo','jamo@jam.com', '8899','admin','11','11')
+check.user_registration('jamoo','jamoo@jam.com', '88999','user','11','11')
+check.user_registration('jamooo','jamooo@jam.com', '886999','user','11','11')
+
+from models.notebook_memo import UserMemo
+memo = UserMemo()
+memo.create_my_memo("This is memo 1")
+memo.view_my_memos()
+memo.delete_my_memo()

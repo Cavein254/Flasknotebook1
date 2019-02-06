@@ -1,0 +1,6 @@
+login html
+register user html
+user view memo html
+edit my memo html
+delete my memo html
+admin view users.
