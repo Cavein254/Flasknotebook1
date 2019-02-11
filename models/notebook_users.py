@@ -91,7 +91,7 @@ class User(object):
             "my_memos":[]
         }
 
-        from models.notebook_memo import UserMemo
+        #from models.notebook_memo import UserMemo
         UserMemo.data_storage[payload["user_id"]] = person_actions
 
         reply = {
