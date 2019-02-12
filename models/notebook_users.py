@@ -6,6 +6,8 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as
 class User(object):
     """Class user houses all of Notebook users."""
     notebook_users= []
+    register_user_error_log = []
+    login_user_error_log = []
 
     def __init__(self,viewer_id=False):
         if viewer_id:
@@ -13,12 +15,12 @@ class User(object):
         else:
             self.viewer_id = 0
 
-    def my_login(self,username,password):
+    def my_login(self,email,password):
         """This method is used for user login."""
         our_users = User.notebook_users
 
         for person in our_users:
-            if person["username"] == username:
+            if person["email"] == email:
                 if check_password_hash(person['password'], password):
                     key1 = Serializer("Kevo_The_Great", expires_in=21600)
                     tok = key1.dumps({
@@ -36,6 +38,7 @@ class User(object):
                 "Status":"BAD",
                 "message":"Invalid login."
             }
+            login_user_error_log.append(payload)
             return payload
 
 
@@ -47,32 +50,36 @@ class User(object):
 
         for person in our_users:
             if person["username"] == username:
-                jibu = {
+                answer = {
                     "Status":"BAD",
                     "message":"Username already in system"
                 }
-                return jibu
+                register_user_error_log.append(answer)
+                return answer
 
             if person["email"] == email:
-                jibu = {
+                answer = {
                     "Status":"BAD",
                     "message":"Email already in system"
                 }
-                return jibu
+                register_user_error_log.append(answer)
+                return answer
 
             if person["phone_number"] == phone_number:
-                jibu = {
+                answer = {
                     "Status":"BAD",
                     "message":"Phone already in system"
                 }
-                return jibu
-        
+                register_user_error_log.append(answer)
+                return answer
+
         if password != confirm_password:
-            jibu = {
+            answer = {
                 "Status":"BAD",
                 "message":"'Password' and 'confirm password' not matching"
             }
-            return jibu
+            register_user_error_log.append(answer)
+            return answer
 
         payload = {
             "user_id": uuid.uuid4().int,
@@ -81,7 +88,7 @@ class User(object):
             "phone_number": phone_number,
             "password": generate_password_hash(password),
             "is_enabled": "True",
-            "role": role         
+            "role": role
         }
 
         User.notebook_users.append(payload)
@@ -99,7 +106,7 @@ class User(object):
             "username": payload["username"],
             "email": payload["email"],
             "phone_number": payload["phone_number"],
-            "role": payload["role"]         
+            "role": payload["role"]
         }
 
         return reply
@@ -114,7 +121,7 @@ class User(object):
                         "notebook_users":User.notebook_users
                     }
                     return payload
-        
+
         bad_input ={
             "Status":"BAD",
             "message" :"You are unauthorized to view this data."
@@ -140,7 +147,7 @@ class User(object):
             "message":"You cannot delete this user contact admin."
         }
         return payload2
-                        
+
 
     def admin_view_a_user(self,user_id):
         for user in User.notebook_users:
