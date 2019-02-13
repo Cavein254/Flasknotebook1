@@ -38,7 +38,7 @@ class User(object):
                 "Status":"BAD",
                 "message":"Invalid login."
             }
-            login_user_error_log.append(payload)
+            self.login_user_error_log.append(payload)
             return payload
 
 
@@ -54,7 +54,7 @@ class User(object):
                     "Status":"BAD",
                     "message":"Username already in system"
                 }
-                register_user_error_log.append(answer)
+                self.register_user_error_log.append(answer)
                 return answer
 
             if person["email"] == email:
@@ -62,7 +62,7 @@ class User(object):
                     "Status":"BAD",
                     "message":"Email already in system"
                 }
-                register_user_error_log.append(answer)
+                self.register_user_error_log.append(answer)
                 return answer
 
             if person["phone_number"] == phone_number:
@@ -70,16 +70,16 @@ class User(object):
                     "Status":"BAD",
                     "message":"Phone already in system"
                 }
-                register_user_error_log.append(answer)
+                self.register_user_error_log.append(answer)
                 return answer
 
-        if password != confirm_password:
-            answer = {
-                "Status":"BAD",
-                "message":"'Password' and 'confirm password' not matching"
-            }
-            register_user_error_log.append(answer)
-            return answer
+            if password != confirm_password:
+                answer = {
+                    "Status":"BAD",
+                    "message":"'Password' and 'confirm password' not matching"
+                }
+                self.register_user_error_log.append(answer)
+                return answer
 
         payload = {
             "user_id": uuid.uuid4().int,
@@ -98,7 +98,7 @@ class User(object):
             "my_memos":[]
         }
 
-        #from models.notebook_memo import UserMemo
+        from notebook_memo import UserMemo
         UserMemo.data_storage[payload["user_id"]] = person_actions
 
         reply = {
@@ -159,9 +159,9 @@ class User(object):
                         "User Details":user
                     }
                     return payload
-        payload2 = {
-            "Status":"BAD",
-            "message":"Unauthorized Access"
-        }
+            payload2 = {
+                "Status":"BAD",
+                "message":"Unauthorized Access"
+            }
 
         return payload2

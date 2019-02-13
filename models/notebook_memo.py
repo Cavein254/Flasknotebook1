@@ -153,18 +153,21 @@ class UserMemo(object):
         return payload2
     
     def delete_message():
-        #from models.notebook_users import user
+        from models.notebook_users import User
         for user in User.notebook_users:
             for message in data_storage["my_inbox"]:
                 del(message)
-            return payload{
-                "status":"GOOD",
-                "message":"Successfully deleted messages"
-            }
-        return payload2{
+                payload = {
+                    "status":"GOOD",
+                    "message":"Successfully deleted messages"
+                }
+            return payload
+
+        payload2 = {
             "status":"BAD",
             "message":"Failed to delete message"
         }
+        return payload2
 
 
     def user_view_a_message():
@@ -172,14 +175,16 @@ class UserMemo(object):
         for user in User.notebook_users:
             for message in data_storage["my_inbox"]:
                 return message
-            return payload{
+            payload ={
                 "status":"GOOD",
                 "message":"You can view your messages"
             }
-        return payload2{
+            return payload
+        payload2 = {
             "status":"BAD",
             "message":"Failed not allowed to view message"
         }
+        return payload2
 
     def user_view_a_memo():
         pass
